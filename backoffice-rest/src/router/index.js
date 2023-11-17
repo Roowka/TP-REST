@@ -30,20 +30,30 @@ function requireAnonymous(to, from, next) {
   }
 }
 
-function requireRestaurantRole(to, from, next) {
+async function requireRestaurantRole(to, from, next) {
   const userStore = useUserStore();
-  if (userStore.user.role == "RESTAURANT") {
+  await userStore.loadUser();
+
+  if (userStore?.user?.role == "RESTAURANT") {
     next();
-  } else {
+  } else if (userStore?.user?.role == "ADMIN") {
     next({ path: "/dashboard/restaurants" });
+  } else {
+    userStore.logout();
+    next({ path: "/" });
   }
 }
-function requireAdminRole(to, from, next) {
+async function requireAdminRole(to, from, next) {
   const userStore = useUserStore();
-  if (userStore.user.role == "ADMIN") {
+  await userStore.loadUser();
+  console.log(userStore?.user?.role);
+  if (userStore?.user?.role == "ADMIN") {
     next();
-  } else {
+  } else if (userStore?.user?.role == "RESTAURANT") {
     next({ path: "/dashboard/my-restaurant" });
+  } else {
+    userStore.logout();
+    next({ path: "/" });
   }
 }
 

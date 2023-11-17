@@ -7,32 +7,15 @@ class ApiService {
   }
 
   async getRestaurantAccounts() {
-    return [
-      {
-        _id: 1,
-        email: "restaurateur@gmail.com",
-        name: "Le restaurateur",
-      },
-      {
-        _id: 2,
-        email: "restaurateur2@gmail.com",
-        name: "Le restaurateur 2",
-      },
-    ];
+    const { data } = await AxiosInstance.get(`/restaurants`);
+    return data;
   }
 
   async createRestaurantUser(restaurantUser) {
-    /* const { data } = await AxiosInstance.post(`/users`, {
+     const { data } = await AxiosInstance.post(`/restaurants`, {
       data: restaurantUser
-    }); */
-    return {
-      _id: 1,
-      email: "restaurateur@gmail.com",
-      name: "Le restaurateur",
-      address: "",
-      postalCode: "",
-      city: "",
-    };
+    }); 
+    return data;
   }
   async updateRestaurantUser(restaurantUser) {
     /* const { data } = await AxiosInstance.patch(`/users/@me`, {
@@ -42,6 +25,11 @@ class ApiService {
       _id: 1,
       ...restaurantUser,
     };
+  }
+
+  async deleteRestaurant(id) {
+    const { data } = await AxiosInstance.delete(`/restaurants/${id}`);
+    return data;
   }
 
   async getPlate(plateId) {
