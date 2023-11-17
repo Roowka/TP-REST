@@ -14,11 +14,11 @@ export const useUserStore = defineStore("user", {
   actions: {
     async login(email, password) {
       const token = await AuthService.login(email, password);
-      const user = await ApiService.getLoggedUser();
 
       localStorage.setItem("accessToken", token);
-
       this.accessToken = token;
+      const user = await ApiService.getLoggedUser();
+
       this.user = user;
     },
     async register(email, name, password) {
@@ -33,6 +33,7 @@ export const useUserStore = defineStore("user", {
     async loadUser() {
       if (this.accessToken) {
         const user = await ApiService.getLoggedUser();
+
         this.user = user;
       }
     },

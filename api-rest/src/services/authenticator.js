@@ -26,7 +26,7 @@ class Authenticator {
     const user = await User.create({
       email: body?.email,
       name: body?.name,
-      firstName: body?.firstName,
+      role: body?.role,
       password: await Hash.hash(body?.password),
     });
 

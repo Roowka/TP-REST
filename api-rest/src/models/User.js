@@ -6,17 +6,13 @@ const Schema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    firstName: {
-      type: String,
-      required: true,
-    },
     password: {
       type: String,
       required: true,
     },
     role: {
       type: String,
-      enum: ["ADMIN", "USER"],
+      enum: ["ADMIN", "USER", "RESTAURANT"],
       required: true,
       default: "USER",
     },
@@ -27,7 +23,6 @@ Schema.methods.toJSON = function () {
   return {
     _id: this._id,
     email: this.email,
-    firstName: this.firstName,
     role: this.role,
   };
 };
