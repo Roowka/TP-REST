@@ -6,8 +6,7 @@ import { onMounted, ref } from "vue";
 const plate = ref({
   name: "",
   image: "",
-  price: "",
-  city: "",
+  price: ""
 });
 
 const route = useRoute();

@@ -1,8 +1,7 @@
 const { Router } = require("express");
 const requireRoles = require("../middlewares/require-role");
 const requireAuth = require("../middlewares/require-auth");
-const User = require("../models/User");
-const Hash = require("../utils/hash");
+const Plate = require("../models/Plate");
 
 /**
  * @param {Express.Application} app
@@ -10,45 +9,37 @@ const Hash = require("../utils/hash");
  */
 module.exports = function (app, router) {
   router.get(
-    "/users",
-    [requireAuth, requireRoles(["ADMIN"])],
+    "/restaurants/:id/plates",
     async (req, res) => {
-      res.send(await User.find());
+      res.send(await Plate.find({ restaurantId: req.params.id }));
     }
   );
 
   router.get(
-    "/restaurants",
-    [requireAuth, requireRoles(["ADMIN"])],
+    "/plates/:id",
     async (req, res) => {
-      res.send(await User.find({ role: "RESTAURANT" }));
+      res.send(await Plate.findById(req.params.id));
     }
   );
 
   router.post(
-    "/restaurants",
-    [requireAuth, requireRoles(["ADMIN"])],
+    "/restaurants/:id/plates",
+    [requireAuth, requireRoles(["RESTAURANT"])],
     async (req, res) => {
       let data = req.body.data;
-      data.password = await Hash.hash(data.password);
-      const user = await User.findOne({ email: data.email });
-      if(user == null) {
-        res.send(await User.create({
-          ...data,
-           role: "RESTAURANT"
-         }));
-      } else {
-        res.status(409).send('User already exists');
-      }
+      res.send(await Plate.create({
+         ...data,
+          restaurantId: req.params.id
+        }));
     }
   );
 
   router.patch(
-    "/restaurants/:id",
+    "/plates/:id",
     [requireAuth, requireRoles(["RESTAURANT"])],
     async (req, res) => {
       let data = req.body.data;
-      res.send(await User.findByIdAndUpdate( req.params.id, data));
+      res.send(await Plate.findByIdAndUpdate( req.params.id, data));
     }
   );
 

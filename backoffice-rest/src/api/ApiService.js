@@ -18,13 +18,10 @@ class ApiService {
     return data;
   }
   async updateRestaurantUser(restaurantUser) {
-    /* const { data } = await AxiosInstance.patch(`/users/@me`, {
+     const { data } = await AxiosInstance.patch(`/restaurants/${restaurantUser._id}`, {
       data: restaurantUser
-    }); */
-    return {
-      _id: 1,
-      ...restaurantUser,
-    };
+    }); 
+    return data;
   }
 
   async deleteRestaurant(id) {
@@ -33,54 +30,37 @@ class ApiService {
   }
 
   async getPlate(plateId) {
-    return {
-      _id: plateId,
-      name: "spagetthi",
-      image:
-        "https://assets.afcdn.com/recipe/20180326/78166_w1024h768c1cx2592cy1728.webp",
-      price: 10.99,
-    };
+    const { data } = await AxiosInstance.get(`/plates/${plateId}`); 
+    return data;
   }
 
   async updatePlate(plateId, newPlate) {
-    return newPlate;
+    const { data } = await AxiosInstance.patch(`/plates/${plateId}`, {
+      data: newPlate
+    });
+    return data;
   }
 
   async createPlate(newPlate) {
-    return newPlate;
+    const loggedUser = await this.getLoggedUser()
+    if(newPlate.name != '' && newPlate.image != '' && newPlate.price != '') {
+      try {
+        const { data } = await AxiosInstance.post(`/restaurants/${loggedUser._id}/plates`, {
+          data: newPlate
+        }); 
+        return data;
+      } catch (error) {
+        return error;
+      }
+    } else {
+      throw new Error('All fields are required');
+    }
   }
 
   async getRestaurantPlates() {
-    return [
-      {
-        _id: 3,
-        name: "spagetthi",
-        image:
-          "https://assets.afcdn.com/recipe/20180326/78166_w1024h768c1cx2592cy1728.webp",
-        price: 3.99,
-      },
-      {
-        _id: 4,
-        name: "spagetthi",
-        image:
-          "https://assets.afcdn.com/recipe/20180326/78166_w1024h768c1cx2592cy1728.webp",
-        price: 3.99,
-      },
-      {
-        _id: 5,
-        name: "spagetthi",
-        image:
-          "https://assets.afcdn.com/recipe/20180326/78166_w1024h768c1cx2592cy1728.webp",
-        price: 3.99,
-      },
-      {
-        _id: 6,
-        name: "spagetthi",
-        image:
-          "https://assets.afcdn.com/recipe/20180326/78166_w1024h768c1cx2592cy1728.webp",
-        price: 3.99,
-      },
-    ];
+    const loggedUser = await this.getLoggedUser()
+    const { data } = await AxiosInstance.get(`/restaurants/${loggedUser._id}/plates`);
+    return data;
   }
 
   async cancelOrder(orderId) {
