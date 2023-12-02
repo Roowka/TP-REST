@@ -19,7 +19,7 @@ async function main() {
   ];
 
   const response = await prompts(questions);
-  const user = await authenticator.create({ ...response, role: "ADMIN" });
+  const user = await authenticator.create({ ...response, role: "USER" });
   console.log("user created", user);
 }
 
