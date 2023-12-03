@@ -75,7 +75,6 @@ class ApiService {
   async getRestaurantOrders() {
     const loggedUser = await this.getLoggedUser()
     const { data } = await AxiosInstance.get(`/restaurants/${loggedUser._id}/orders`);
-    console.log(data)
     return data;
   }
 }

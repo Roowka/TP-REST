@@ -25,12 +25,7 @@ onMounted(() => {
       <h1 class="page-title">Commandes</h1>
     </header>
     <div class="orders">
-      <OrderItem
-        @onOrderCanceled="onOrderCanceled"
-        v-for="order in orders"
-        :key="order._id"
-        :order="order"
-      />
+      <OrderItem @orderCanceled="onOrderCanceled" v-for="order in orders" :key="order._id" :order="order" />
     </div>
   </div>
 </template>

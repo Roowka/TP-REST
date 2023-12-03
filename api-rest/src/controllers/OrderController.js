@@ -11,7 +11,7 @@ module.exports = function (app, router) {
   router.get(
     "/restaurants/:id/orders",
     async (req, res) => {
-      res.send(await Order.find({ restaurantId: req.params.id }));
+      res.send(await Order.find({ restaurantId: req.params.id, status: "PROCESSED"}));
     }
   );
 
@@ -23,7 +23,7 @@ module.exports = function (app, router) {
   );
 
   router.patch(
-    "/plates/:id",
+    "/orders/:id",
     [requireAuth, requireRoles(["RESTAURANT"])],
     async (req, res) => {
       let data = req.body.data;
