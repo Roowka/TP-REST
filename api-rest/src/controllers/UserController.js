@@ -2,6 +2,8 @@ const { Router } = require("express");
 const requireRoles = require("../middlewares/require-role");
 const requireAuth = require("../middlewares/require-auth");
 const User = require("../models/User");
+const Order = require("../models/Order");
+const Plate = require("../models/Plate");
 const Hash = require("../utils/hash");
 
 /**
@@ -56,6 +58,9 @@ module.exports = function (app, router) {
     "/restaurants/:id",
     [requireAuth, requireRoles(["ADMIN"])],
     async (req, res) => {
+      // Suppression de tout ce qui est lié au restaurant
+      await Plate.find({ restaurantId: req.params.id }).deleteMany();
+      await Order.find({ restaurantId: req.params.id }).deleteMany();
       res.send(await User.deleteOne({ _id: req.params.id }));
     }
   );
